@@ -1,6 +1,7 @@
 package com.example.eventdriven;
 
-import com.example.eventdriven.model.User;
+import com.example.eventdriven.model.UserRabbit;
+import com.example.eventdriven.model.UserRest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -16,10 +17,10 @@ public class UserEventListener {
     @RabbitListener(queues = RabbitConfig.USER_EVENT_QUEUE)
     public void handleUserEvent(String event) {
         try {
-            User eventUser = objectMapper.readValue(event, User.class);
-            System.out.println("📩 Receive event: " + eventUser);
+            UserRabbit eventUserRest = objectMapper.readValue(event, UserRabbit.class);
+            System.out.println("📩 Receive event to rabbit: " + eventUserRest);
 
-            userService.updateOrCreateUser(eventUser);
+            userService.updateOrCreateUser(eventUserRest);
         } catch (Exception e) {
             System.err.println("❌ Error while processing message: " + e.getMessage());
         }

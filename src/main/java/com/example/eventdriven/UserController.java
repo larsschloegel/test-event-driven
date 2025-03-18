@@ -1,6 +1,6 @@
 package com.example.eventdriven;
 
-import com.example.eventdriven.model.User;
+import com.example.eventdriven.model.UserRest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,10 +21,10 @@ public class UserController {
     @PostMapping("/user-event")
     public ResponseEntity<String> handleUserEvent(@RequestBody String event) {
         try {
-            User eventUser = objectMapper.readValue(event, User.class);
-            System.out.println("📩 Receive event: " + eventUser);
+            UserRest eventUserRest = objectMapper.readValue(event, UserRest.class);
+            System.out.println("📩 Receive event to controller: " + eventUserRest);
 
-            userService.updateOrCreateUser(eventUser);
+            userService.updateOrCreateUser(eventUserRest);
             return ResponseEntity.ok("User processed successfully");
         } catch (Exception e) {
             System.err.println("❌ Error while processing message: " + e.getMessage());
