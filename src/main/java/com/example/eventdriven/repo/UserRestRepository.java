@@ -1,6 +1,6 @@
 package com.example.eventdriven.repo;
 
-import com.example.eventdriven.model.UserRest;
+import com.example.eventdriven.repo.entities.UserRest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

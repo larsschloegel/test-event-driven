@@ -1,7 +1,9 @@
 package com.example.eventdriven;
 
-import com.example.eventdriven.model.UserRabbit;
-import com.example.eventdriven.model.UserRest;
+import com.example.eventdriven.model.UserDTO;
+import com.example.eventdriven.model.UserType;
+import com.example.eventdriven.repo.entities.UserRabbit;
+import com.example.eventdriven.repo.entities.UserRest;
 import com.example.eventdriven.repo.UserRabbitRepository;
 import com.example.eventdriven.repo.UserRestRepository;
 import lombok.AllArgsConstructor;
@@ -15,19 +17,24 @@ import java.util.Optional;
 public class UserService {
     private final UserRestRepository userRestRepository;
     private final UserRabbitRepository userRabbitRepository;
+    private final UserMapper userMapper;
 
     @Transactional
-    public void updateOrCreateUser(Object eventUser) {
-        if (eventUser instanceof UserRest) {
-            handleUserRest((UserRest) eventUser);
-        } else if (eventUser instanceof UserRabbit) {
-            handleUserRabbit((UserRabbit) eventUser);
+    public void updateOrCreateUser(UserDTO eventUser, UserType userType) {
+        if (userType.equals(UserType.CONTROLLER)) {
+            UserRest restUser = userMapper.mapToUserRest(eventUser);
+            handleUserRest(restUser);
+        } else if (userType.equals(UserType.RABBIT)) {
+            UserRabbit rabbit = userMapper.mapToUserRabbit(eventUser);
+            handleUserRabbit(rabbit);
         } else {
             throw new IllegalArgumentException("Unsupported user type: " + eventUser.getClass().getSimpleName());
         }
     }
 
-    private void handleUserRest(UserRest eventUserRest) {
+
+    void handleUserRest(UserRest eventUserRest) {
+        System.out.println("Rest method");
         Optional<UserRest> existingUser = userRestRepository.findByEmail(eventUserRest.getEmail());
         if (existingUser.isPresent()) {
             UserRest userRest = existingUser.get();
@@ -42,7 +49,8 @@ public class UserService {
         }
     }
 
-    private void handleUserRabbit(UserRabbit eventUserRabbit) {
+    void handleUserRabbit(UserRabbit eventUserRabbit) {
+        System.out.println("Rabbit method");
         Optional<UserRabbit> existingUser = userRabbitRepository.findByEmail(eventUserRabbit.getEmail());
         if (existingUser.isPresent()) {
             UserRabbit userRabbit = existingUser.get();

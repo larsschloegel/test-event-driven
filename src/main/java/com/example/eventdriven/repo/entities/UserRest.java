@@ -1,4 +1,4 @@
-package com.example.eventdriven.model;
+package com.example.eventdriven.repo.entities;
 
 
 import jakarta.persistence.*;
@@ -16,6 +16,8 @@ public class UserRest {
 
     private String firstName;
     private String lastName;
+
+    @Column(unique = true)
     private String email;
     private String payload;
 }

@@ -1,6 +1,7 @@
-package com.example.eventdriven.model;
+package com.example.eventdriven.repo.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,4 +19,5 @@ public class UserRabbit {
     private String lastName;
     private String email;
     private String payload;
+
 }
