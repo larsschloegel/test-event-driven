@@ -7,6 +7,7 @@ import com.example.eventdriven.repo.entities.UserRest;
 import com.example.eventdriven.repo.UserRabbitRepository;
 import com.example.eventdriven.repo.UserRestRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +42,12 @@ public class UserService {
             userRest.setFirstName(eventUserRest.getFirstName());
             userRest.setLastName(eventUserRest.getLastName());
             userRest.setPayload(eventUserRest.getPayload());
-            userRestRepository.save(userRest);
+            try {
+                userRestRepository.save(userRest);
+            } catch (DataIntegrityViolationException e) {
+                throw new DataIntegrityViolationException("Email bereits vorhanden");
+            }
+
             System.out.println("Updated User (REST): " + userRest.getId());
         } else {
             userRestRepository.save(eventUserRest);

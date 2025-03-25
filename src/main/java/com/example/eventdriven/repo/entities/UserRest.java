@@ -8,7 +8,12 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
-@Table(name = "user_rest")
+@Table(name = "user_rest",
+        indexes = {
+                @Index(name = "idx_email_unique",
+                        columnList = "email",
+                        unique = true)
+        })
 public class UserRest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +22,7 @@ public class UserRest {
     private String firstName;
     private String lastName;
 
-    @Column(unique = true)
+    @Column(name = "email", nullable = false)
     private String email;
     private String payload;
 }
